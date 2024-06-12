@@ -37,7 +37,7 @@ def write_result_to_file(file_path, result):
 def main():
     input_file_path = 'sample_01_easy.log'
     output_file_path = 'output.txt'
-    n = 4  # Set the value of n as desired
+    n = 4
 
     ip_counts = parse_log_file(input_file_path)
     top_n_ips = get_top_n_ip_addresses(ip_counts, n)
