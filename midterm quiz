@@ -1,0 +1,48 @@
+import heapq
+from collections import defaultdict
+
+def parse_log_file(file_path):
+    ip_counts = defaultdict(int)
+    with open(file_path, 'r') as file:
+        for line in file:
+            ip_address, count = line.strip().split(',')
+            ip_counts[ip_address] += int(count)
+    return ip_counts
+
+def get_top_n_ip_addresses(ip_counts, n):
+    min_heap = []
+    for ip_address, count in ip_counts.items():
+        heapq.heappush(min_heap, (count, ip_address))
+        if len(min_heap) > n:
+            heapq.heappop(min_heap)
+
+    top_n_ips = sorted(min_heap, reverse=True)
+    importance = 1
+    prev_count = float('inf')
+    result = []
+
+    for count, ip_address in top_n_ips:
+        if count < prev_count:
+            importance += 1
+            prev_count = count
+        result.append((importance, ip_address, count))
+
+    return result
+
+def write_result_to_file(file_path, result):
+    with open(file_path, 'w') as file:
+        for importance, ip_address, count in result:
+            file.write(f"{importance}, {ip_address}, {count}\n")
+
+def main():
+    input_file_path = 'sample_01_easy.log'
+    output_file_path = 'output.txt'
+    n = 4  # Set the value of n as desired
+
+    ip_counts = parse_log_file(input_file_path)
+    top_n_ips = get_top_n_ip_addresses(ip_counts, n)
+    write_result_to_file(output_file_path, top_n_ips)
+
+if __name__ == '__main__':
+    main()
+
